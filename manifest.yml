@@ -1,0 +1,9 @@
+---
+applications:
+-  name: e-commerce-account
+   path: build/lib
+   buildpack: java_buildpack
+   disk_quota: 512M
+   memory: 512M
+   routes:
+     - route: e-commerce-account-deanderson.cfapps.io
