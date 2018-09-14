@@ -8,7 +8,11 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
@@ -18,25 +22,21 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
+@SpringBootTest(classes = {AddressServices.class}, webEnvironment = SpringBootTest.WebEnvironment.NONE)
 public class AddressServicesUnitTests {
 
-    @Mock
+    @MockBean
     private AddressRepository addressRepository;
 
-    @InjectMocks
+    @Autowired
     private AddressServices addressServices;
 
-    @Before
-    public void setup(){
-        MockitoAnnotations.initMocks(this);
-    }
-
     //Mock Items
-
     private Address addressToSave = new Address("123 Freedom Street", "", "Dallas", "Texas", "12345", "USA");
     private Address mockAddress1 = new Address("123 Freedom Street", "", "Dallas", "Texas", "12345", "USA");
     private Address mockAddress2 = new Address("256 Liberty Drive", "2b", "Cameron", "Missouri", "67890", "USA");
@@ -83,5 +83,16 @@ public class AddressServicesUnitTests {
 
         assertThat(savedAddress.getAddressId(), is(2L));
         assertThat(savedAddress.getStreet(), is("256 Liberty Drive"));
+    }
+
+    @Test
+    public void deleteAddress_HappyPath(){
+
+        when(addressRepository.findOneByAccountIdAndAddressId(12345L, 15L)).thenReturn(mockAddress2);
+
+        addressServices.deleteAddress( 12345L, 15L);
+
+        verify(addressRepository, times(1)).deleteById(15L);
+
     }
 }

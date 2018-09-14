@@ -4,6 +4,7 @@ import com.solstice.ecommerceaccount.domain.Address;
 import com.solstice.ecommerceaccount.repository.AddressRepository;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Service
@@ -28,4 +29,12 @@ public class AddressServices {
         return addressRepository.findOneByAccountIdAndAddressId(accountId, addressId);
     }
 
+    public void deleteAddress(Long accountId, Long addressId) {
+        if(getOneAddress(accountId, addressId) != null){
+            addressRepository.deleteById(addressId);
+        }
+        else{
+            throw new EntityNotFoundException();
+        }
+    }
 }
