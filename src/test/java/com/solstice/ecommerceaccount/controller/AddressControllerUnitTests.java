@@ -22,6 +22,7 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -135,5 +136,10 @@ public class AddressControllerUnitTests {
                 .andExpect(jsonPath("$.country", is("USA")));
     }
 
+    @Test
+    public void deleteAddress_HappyPath() throws Exception{
 
+        mockMvc.perform(delete("/accounts/67890/addresses/15"))
+                .andExpect(status().isNoContent());
+    }
 }

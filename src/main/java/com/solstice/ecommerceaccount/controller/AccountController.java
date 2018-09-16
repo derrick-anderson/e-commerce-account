@@ -45,6 +45,9 @@ public class AccountController {
         return accountServices.getOneAccount(accountId);
     }
 
+    //Address Methods
+    //todo: Split these into their own controller
+
     @GetMapping("accounts/{accountId}/addresses")
     public List<Address> getAllAddresses(@PathVariable("accountId") Long accountId){
 
@@ -68,7 +71,12 @@ public class AccountController {
         return addressServices.getOneAddress(accountId, addressId);
     }
 
+    @DeleteMapping("/accounts/{accountId}/addresses/{addressId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteAddress(@PathVariable("accountId") Long accountId, @PathVariable("addressId") Long addressId){
 
+        addressServices.deleteAddress(accountId, addressId);
 
+    }
 
 }
