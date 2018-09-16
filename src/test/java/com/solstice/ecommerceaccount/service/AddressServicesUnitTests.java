@@ -36,7 +36,7 @@ public class AddressServicesUnitTests {
     @Autowired
     private AddressServices addressServices;
 
-    //Mock Items
+    //todo: move these to a helper method
     private Address addressToSave = new Address("123 Freedom Street", "", "Dallas", "Texas", "12345", "USA");
     private Address mockAddress1 = new Address("123 Freedom Street", "", "Dallas", "Texas", "12345", "USA");
     private Address mockAddress2 = new Address("256 Liberty Drive", "2b", "Cameron", "Missouri", "67890", "USA");
