@@ -52,7 +52,7 @@ public class AddressServicesUnitTests {
 
 
     @Test
-    public void testGetAllAddressesForAccount(){
+    public void getAllAddresses_HappyPath(){
 
         when(addressRepository.findAllByAccountId(anyLong())).thenReturn(mockAddressList);
 
@@ -63,7 +63,7 @@ public class AddressServicesUnitTests {
     }
 
     @Test
-    public void testGetOneAddressForAccount(){
+    public void getOneAddress_HappyPath(){
 
         when(addressRepository.findOneByAccountIdAndAddressId(anyLong(), anyLong())).thenReturn(mockAddress1);
 
@@ -75,7 +75,7 @@ public class AddressServicesUnitTests {
     }
 
     @Test
-    public void testSaveAddressForAccount(){
+    public void saveAddress_HappyPath(){
 
         when(addressRepository.save(any(Address.class))).thenReturn(mockAddress2);
 
@@ -93,6 +93,20 @@ public class AddressServicesUnitTests {
         addressServices.deleteAddress( 12345L, 15L);
 
         verify(addressRepository, times(1)).deleteById(15L);
+
+    }
+
+    @Test
+    public void updateAddress_HappyPath(){
+
+        when(addressRepository.findOneByAccountIdAndAddressId(anyLong(), anyLong())).thenReturn(mockAddress1);
+        when(addressRepository.save(any())).thenReturn(mockAddress1);
+
+        Address savedAddress = addressServices.updateAddress(1L, 1L, mockAddress1);
+
+        assertThat(savedAddress.getAddressId(), is(1L));
+        assertThat(savedAddress.getAccountId(), is(1L));
+        assertThat(savedAddress.getStreet(), is("123 Freedom Street"));
 
     }
 }

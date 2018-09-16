@@ -18,13 +18,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.hamcrest.Matchers.any;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -48,7 +47,7 @@ public class AddressControllerUnitTests {
     }
 
     @Test
-    public void testSaveAddress() throws Exception{
+    public void saveAddress_HappyPath() throws Exception{
 
         Address mockAddress = new Address("123 Freedom Street", "", "Dallas", "Texas", "12345", "USA" );
         mockAddress.setAccountId(1L);
@@ -77,7 +76,7 @@ public class AddressControllerUnitTests {
     }
 
     @Test
-    public void testGetAllAddressesForAccount() throws Exception {
+    public void getAllAddresses_HappyPath() throws Exception {
 
         List<Address> mockAddressList = new ArrayList<>();
 
@@ -116,7 +115,8 @@ public class AddressControllerUnitTests {
     }
 
     @Test
-    public void testGetOneAddress() throws Exception{
+    public void getOneAddress_HappyPath() throws Exception{
+
         Address mockAddress = new Address("123 Freedom Street", "", "Dallas", "Texas", "12345", "USA" );
         mockAddress.setAccountId(1L);
         mockAddress.setAddressId(1L);
@@ -134,12 +134,44 @@ public class AddressControllerUnitTests {
                 .andExpect(jsonPath("$.state", is("Texas")))
                 .andExpect(jsonPath("$.postal", is("12345")))
                 .andExpect(jsonPath("$.country", is("USA")));
+
+    }
+
+    @Test
+    public void updateAddress_HappyPath() throws Exception{
+
+        when(addressServices.updateAddress(anyLong(), anyLong(), ArgumentMatchers.any(Address.class))).thenReturn(getMockAddress(67890L, 15L));
+
+        mockMvc.perform(
+                put("/accounts/67890/addresses/15")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(getUpdateAddressJson()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").exists())
+                .andExpect(jsonPath("$.accountId", is(67890)))
+                .andExpect(jsonPath("$.addressId", is(15)))
+                .andExpect(jsonPath("$.street", is("123 Freedom Street")))
+                .andExpect(jsonPath("$.unit", is("")))
+                .andExpect(jsonPath("$.city", is("Dallas")))
+                .andExpect(jsonPath("$.state", is("Texas")))
+                .andExpect(jsonPath("$.postal", is("12345")))
+                .andExpect(jsonPath("$.country", is("USA")));
     }
 
     @Test
     public void deleteAddress_HappyPath() throws Exception{
-
         mockMvc.perform(delete("/accounts/67890/addresses/15"))
                 .andExpect(status().isNoContent());
+    }
+
+    private String getUpdateAddressJson() {
+        return "{ \"street\": \"1630 W Farwell Avenue\", \"unit\": \"2B\"}";
+    }
+
+    private Address getMockAddress(Long accountId, Long addressId){
+        Address mockAddress = new Address("123 Freedom Street", "", "Dallas", "Texas", "12345", "USA" );
+        mockAddress.setAccountId(accountId);
+        mockAddress.setAddressId(addressId);
+        return mockAddress;
     }
 }

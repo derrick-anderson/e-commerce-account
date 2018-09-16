@@ -79,4 +79,12 @@ public class AccountController {
 
     }
 
+    @PutMapping("/accounts/{accountId}/addresses/{addressId}")
+    public Address updateAddress(@PathVariable("accountId") Long accountId, @PathVariable("addressId") Long addressId, @RequestBody Address addressIn){
+
+        return addressServices.updateAddress(accountId, addressId, addressIn);
+
+    }
+
+
 }

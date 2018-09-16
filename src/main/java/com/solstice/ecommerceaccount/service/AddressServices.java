@@ -37,4 +37,13 @@ public class AddressServices {
             throw new EntityNotFoundException();
         }
     }
+
+    public Address updateAddress(Long accountId, Long addressId, Address addressToUpdate) {
+        if(getOneAddress(accountId, addressId) != null){
+            return addressRepository.save(addressToUpdate);
+        }
+        else{
+            throw new EntityNotFoundException();
+        }
+    }
 }
