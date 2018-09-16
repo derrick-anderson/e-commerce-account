@@ -17,6 +17,8 @@ import java.util.List;
 
 import static org.junit.Assert.assertThat;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.hamcrest.Matchers.*;
 
@@ -36,7 +38,7 @@ public class AccountServicesUnitTests {
     }
 
     @Test
-    public void testGetAllAccounts() {
+    public void getAllAccounts_HappyPath() {
 
         List<Account> mockAccountList = new ArrayList<>();
 
@@ -57,7 +59,7 @@ public class AccountServicesUnitTests {
     }
 
     @Test
-    public void testGetOneAccountById(){
+    public void getOneAccount_HappyPath(){
 
         Account mockAccount = new Account("John", "Smith", "jsmith@aol.net");
         mockAccount.setAccountId(1L);
@@ -72,7 +74,7 @@ public class AccountServicesUnitTests {
     }
 
     @Test
-    public void testSaveAccount(){
+    public void saveAccount_HappyPath(){
         Account accountToSave = new Account("John", "Smith", "jsmith@aol.net");
         Account mockAccount = new Account("John", "Smith", "jsmith@aol.net");
         mockAccount.setAccountId(5L);
@@ -82,5 +84,13 @@ public class AccountServicesUnitTests {
         Account savedAccount = accountServices.saveAccount(accountToSave);
 
         assertThat(savedAccount.getAccountId(), is(5L));
+    }
+
+    @Test
+    public void deleteAccount_HappyPath(){
+        when(accountRepository.findOneByAccountId(12345L)).thenReturn(new Account());
+        accountServices.deleteAccount(12345L);
+
+        verify(accountRepository, times(1)).deleteById(12345L);
     }
 }
