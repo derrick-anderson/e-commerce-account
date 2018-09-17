@@ -38,10 +38,8 @@ public class AccountServices {
     }
 
     public Account updateAccount(Long accountId, Account updateInfo) {
-
-        if(getOneAccount(accountId) != null) {
-            Account savedAccount = getOneAccount(accountId);
-
+        Account savedAccount = getOneAccount(accountId);
+        if(savedAccount != null) {
             if (updateInfo.getFirstName() != null) {
                 savedAccount.setFirstName(updateInfo.getFirstName());
             }
@@ -51,6 +49,7 @@ public class AccountServices {
             if (updateInfo.getEmailAddress() != null) {
                 savedAccount.setEmailAddress(updateInfo.getEmailAddress());
             }
+            accountRepository.save(savedAccount);
             return savedAccount;
         }else throw new EntityNotFoundException();
     }

@@ -110,5 +110,8 @@ public class AccountServicesUnitTests {
         assertThat(updatedAccount.getLastName(), is("Smith"));
         assertThat(updatedAccount.getEmailAddress(), is("jhsmith@gmail.com"));
 
+        verify(accountRepository, times(1)).findOneByAccountId(67890L);
+        verify(accountRepository, times(1)).save(ArgumentMatchers.any());
+
     }
 }

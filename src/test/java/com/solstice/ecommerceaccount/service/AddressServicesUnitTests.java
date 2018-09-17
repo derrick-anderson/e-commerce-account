@@ -108,5 +108,8 @@ public class AddressServicesUnitTests {
         assertThat(savedAddress.getAccountId(), is(1L));
         assertThat(savedAddress.getStreet(), is("123 Freedom Street"));
 
+        verify(addressRepository, times(1)).findOneByAccountIdAndAddressId(anyLong(), anyLong());
+        verify(addressRepository, times(1)).save(any());
+
     }
 }
