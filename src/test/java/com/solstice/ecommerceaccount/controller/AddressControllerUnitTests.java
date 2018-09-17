@@ -29,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(AccountController.class)
+@WebMvcTest(secure=false, controllers = AccountController.class)
 public class AddressControllerUnitTests {
 
     @Autowired

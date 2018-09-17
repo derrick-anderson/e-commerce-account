@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(AccountController.class)
+@WebMvcTest(secure =false, controllers = AccountController.class)
 public class AccountControllerUnitTests {
 
     @Autowired
