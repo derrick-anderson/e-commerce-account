@@ -93,4 +93,22 @@ public class AccountServicesUnitTests {
 
         verify(accountRepository, times(1)).deleteById(12345L);
     }
+
+    @Test
+    public void updateAccount_HappyPath(){
+
+        Account mockAccount = new Account("John", "Jacob", "jhsmith@gmail.com");
+        mockAccount.setAccountId(67890L);
+
+        Account updateInfo = new Account( null, "Smith", null);
+        when(accountRepository.findOneByAccountId(67890L)).thenReturn(mockAccount);
+
+        Account updatedAccount = accountServices.updateAccount(67890L, updateInfo);
+
+        assertThat(updatedAccount.getAccountId(), is(67890L));
+        assertThat(updatedAccount.getFirstName(), is("John"));
+        assertThat(updatedAccount.getLastName(), is("Smith"));
+        assertThat(updatedAccount.getEmailAddress(), is("jhsmith@gmail.com"));
+
+    }
 }

@@ -45,6 +45,17 @@ public class AccountController {
         return accountServices.getOneAccount(accountId);
     }
 
+    @DeleteMapping("/accounts/{accountId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteAccount(@PathVariable("accountId") Long accountId){
+        accountServices.deleteAccount(accountId);
+    }
+
+    @PutMapping("/accounts/{accountId}")
+    public Account updateAccount(@PathVariable("accountId") Long accountId, @RequestBody Account accountUpdateData){
+        return accountServices.updateAccount(accountId, accountUpdateData);
+    }
+
     //Address Methods
     //todo: Split these into their own controller
 

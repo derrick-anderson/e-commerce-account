@@ -19,9 +19,10 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -44,7 +45,7 @@ public class AccountControllerUnitTests {
     }
 
     @Test
-    public void testSaveAccount() throws Exception{
+    public void saveAccount_HappyPath() throws Exception{
         String accountJson = "{ \"firstName\" : \"John\", \"lastName\" : \"Smith\", \"emailAddress\" : \"jsmith@aol.org\" }";
 
         Account mockAccount = new Account("John", "Smith", "jsmith@aol.org");
@@ -64,7 +65,7 @@ public class AccountControllerUnitTests {
     }
 
     @Test
-    public void testGetAllAccounts() throws Exception {
+    public void getAllAccounts_HappyPath() throws Exception {
 
         List<Account> mockAccountList = new ArrayList<>();
 
@@ -92,7 +93,7 @@ public class AccountControllerUnitTests {
     }
 
     @Test
-    public void testGetOneAccount() throws Exception{
+    public void getOneAccount_HappyPath() throws Exception{
         Account mockAccount1 = new Account("John", "Smith", "jsmith@aol.org");
         mockAccount1.setAccountId(1L);
 
@@ -105,6 +106,37 @@ public class AccountControllerUnitTests {
                 .andExpect(jsonPath("$.firstName", is("John")))
                 .andExpect(jsonPath("$.lastName", is("Smith")))
                 .andExpect(jsonPath("$.emailAddress", is("jsmith@aol.org")));
+    }
+
+    @Test
+    public void deleteAccount_HappyPath() throws Exception{
+
+        mockMvc.perform(delete("/accounts/67890"))
+                .andExpect(status().isNoContent());
+
+        verify(accountServices, times(1)).deleteAccount(67890L);
+
+    }
+
+    @Test
+    public void updateAccount_HappyPath() throws Exception{
+
+        String updateJson = "{ \"lastName\" : \"Smith\" }";
+        Account mockAccount = new Account("John", "Smith", "jsmith@aol.org");
+        mockAccount.setAccountId(67890L);
+
+        when(accountServices.updateAccount(anyLong(), ArgumentMatchers.any(Account.class))).thenReturn(mockAccount);
+
+        mockMvc.perform(
+                put("/accounts/67890")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(updateJson))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").exists())
+                .andExpect(jsonPath("$.firstName", is("John")))
+                .andExpect(jsonPath("$.lastName", is("Smith")))
+                .andExpect(jsonPath("$.emailAddress", is("jsmith@aol.org")))
+                .andExpect(jsonPath("$.accountId", is(67890)));
     }
 
 }

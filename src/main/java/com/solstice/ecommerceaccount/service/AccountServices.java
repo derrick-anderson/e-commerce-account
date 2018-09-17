@@ -36,4 +36,22 @@ public class AccountServices {
             throw new EntityNotFoundException();
         }
     }
+
+    public Account updateAccount(Long accountId, Account updateInfo) {
+
+        if(getOneAccount(accountId) != null) {
+            Account savedAccount = getOneAccount(accountId);
+
+            if (updateInfo.getFirstName() != null) {
+                savedAccount.setFirstName(updateInfo.getFirstName());
+            }
+            if (updateInfo.getLastName() != null) {
+                savedAccount.setLastName(updateInfo.getLastName());
+            }
+            if (updateInfo.getEmailAddress() != null) {
+                savedAccount.setEmailAddress(updateInfo.getEmailAddress());
+            }
+            return savedAccount;
+        }else throw new EntityNotFoundException();
+    }
 }
