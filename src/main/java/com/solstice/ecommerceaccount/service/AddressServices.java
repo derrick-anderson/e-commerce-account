@@ -39,9 +39,29 @@ public class AddressServices {
     }
 
     //todo: add the correct merging logic
-    public Address updateAddress(Long accountId, Long addressId, Address addressToUpdate) {
-        if(getOneAddress(accountId, addressId) != null){
-            return addressRepository.save(addressToUpdate);
+    public Address updateAddress(Long accountId, Long addressId, Address addressUpdateInfo) {
+        Address savedAddress = getOneAddress(accountId, addressId);
+        if(savedAddress != null){
+            if(addressUpdateInfo.getStreet() != null){
+                savedAddress.setStreet(addressUpdateInfo.getStreet());
+            }
+            if(addressUpdateInfo.getUnit() != null){
+                savedAddress.setUnit(addressUpdateInfo.getUnit());
+            }
+            if(addressUpdateInfo.getCity() != null){
+                savedAddress.setCity(addressUpdateInfo.getCity());
+            }
+            if(addressUpdateInfo.getState() != null){
+                savedAddress.setState(addressUpdateInfo.getState());
+            }
+            if(addressUpdateInfo.getPostal() != null){
+                savedAddress.setPostal(addressUpdateInfo.getPostal());
+            }
+            if(addressUpdateInfo.getCountry() != null){
+                savedAddress.setCountry(addressUpdateInfo.getCountry());
+            }
+
+            return addressRepository.save(savedAddress);
         }
         else{
             throw new EntityNotFoundException();
