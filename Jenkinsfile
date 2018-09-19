@@ -1,10 +1,14 @@
 pipeline{
     agent any
     stages{
-        stage('Test'){
+        stage('Checkout'){
             steps{
                 git 'https://github.com/derrick-solstice/e-commerce-account'
-                sh './gradlew test'
+            }
+        }
+        stage('Test'){
+            steps{
+                sh 'gradle test'
             }
         }
     }
