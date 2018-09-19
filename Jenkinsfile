@@ -6,7 +6,7 @@ pipeline{
                 git 'https://github.com/derrick-solstice/e-commerce-account'
             }
             steps{
-                sh 'gradle test'
+                'gradle test'
             }
         }
     }
