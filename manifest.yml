@@ -1,7 +1,7 @@
 ---
 applications:
 -  name: e-commerce-account
-   path: build/lib
+   path: build/libs
    buildpack: java_buildpack
    disk_quota: 512M
    memory: 512M
