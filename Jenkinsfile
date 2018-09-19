@@ -4,7 +4,7 @@ pipeline{
         stage('Test'){
             steps{
                 git 'https://github.com/derrick-solstice/e-commerce-account'
-                sh './gralew test'
+                sh './gradlew test'
             }
         }
     }
